@@ -1,13 +1,17 @@
-NVCC := nvcc
-CFLAGS := -O2
+# Location of the CUDA Toolkit
+NVCC := $(CUDA_PATH)/bin/nvcc
+CCFLAGS := -O2
+EXTRA_NVCCFLAGS := --cudart=shared
+build: vectorAdd
 
-all: conv2dV1 conv2dV2
+vectorAdd.o:vectorAdd.cu
+	$(NVCC) $(INCLUDES) $(CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-conv2dV1: conv2dV1.cu
-	$(NVCC) $(CFLAGS) conv2dV1.cu -o conv2dV1
+vectorAdd: vectorAdd.o
+	$(NVCC) $(LDFLAGS) $(EXTRA_NVCCFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 
-conv2dV2: conv2dV2.cu
-	$(NVCC) $(CFLAGS) conv2dV2.cu -o conv2dV2
+run: build
+	$(EXEC) ./vectorAdd
 
 clean:
-	rm -f conv2dV1 conv2dV2
+	rm -f vectorAdd *.o

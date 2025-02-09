@@ -9,7 +9,7 @@ vectorAdd.o:vectorAdd.cu
 	$(NVCC) $(INCLUDES) $(CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
 vectorAdd: vectorAdd.o
-	$(NVCC) $(LDFLAGS) $(EXTRA_NVCCFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
+	$(NVCC) $(LDFLAGS) $(EXTRA_NVCCFLAGS) $(GENCODE_FLAGS) $(CXXFLAGS) -o $@ $+ $(LIBRARIES)
 
 run: build
 	$(EXEC) ./vectorAdd
